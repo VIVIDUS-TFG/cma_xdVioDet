@@ -36,7 +36,6 @@ def test_single_video(dataloader, model, args):
 
         pred = list(pred.cpu().detach().numpy())
         pred_binary = [1 if pred_value > 0.42 else 0 for pred_value in pred]
-        print(len(pred_binary))
     return pred_binary
 
 def save_results(results, filename):
