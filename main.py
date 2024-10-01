@@ -35,7 +35,7 @@ if __name__ == '__main__':
                               num_workers=args.workers, pin_memory=True)
     test_data = Dataset(args, test_mode=True)
     test_loader = DataLoader(test_data,
-                             batch_size=5, shuffle=False,
+                             batch_size=1, shuffle=False,
                              num_workers=args.workers, pin_memory=True)
 
     model = Model(args)
