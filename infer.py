@@ -13,15 +13,21 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 if __name__ == '__main__':
     print('perform testing...')
     args = option.parser.parse_args()
-    device = torch.device("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
     test_loader = DataLoader(Dataset(args, test_mode=True),
                               batch_size=1, shuffle=False,
                               num_workers=args.workers, pin_memory=True)
     model = Model(args)
+    
     model = model.to(device)
-    model_dict = model.load_state_dict(
-        {k.replace('module.', ''): v for k, v in torch.load('./ckpt/xd_a2v.pkl').items()})
+    if device.type == 'cpu':
+        model_dict = model.load_state_dict(
+            {k.replace('module.', ''): v for k, v in torch.load('./ckpt/xd_a2v.pkl', map_location=torch.device('cpu')).items()})
+    else:
+        model_dict = model.load_state_dict(
+            {k.replace('module.', ''): v for k, v in torch.load('./ckpt/xd_a2v.pkl').items()})
     gt = np.load(args.gt)
     st = time.time()
 

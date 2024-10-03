@@ -25,10 +25,11 @@ def test(dataloader, model, gt):
 def test_single_video(dataloader, model, args):
     with torch.no_grad():
         model.eval()
-        pred = torch.zeros(0).cuda()
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        pred = torch.zeros(0).to(device)
 
         for i, inputs in enumerate(dataloader):
-            inputs = inputs.cuda()
+            inputs = inputs.to(device)
 
             logits = model(inputs)
             logits = torch.mean(logits, 0)
